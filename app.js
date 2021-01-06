@@ -1,6 +1,7 @@
 const express = require('express')
 const app = express()
 const mongoose = require('mongoose')
+const serverless = require('serverless-http');
 require('dotenv/config')
 const Mew = require('./model/mewSchema')
 const cors = require('cors')
@@ -9,9 +10,12 @@ mongoose.connect(process.env.DB_CONNECTION, {useNewUrlParser: true, useUnifiedTo
     console.log('Database terhubung')
 })
 
+const router = express.Router();
+
 app.set('view engine', 'ejs')
 app.use(express.static('public'))
 app.use(express.json())
+app.use('/.netlify/functions/server', router)
 app.use(cors())
 
 app.get('/',(req,res)=>{
